@@ -1,0 +1,49 @@
+import ast
+import autopep8
+import black
+
+# Function to check syntax errors
+def check_syntax(code):
+    try:
+        ast.parse(code)
+        return "No Syntax Errors Found ✅"
+    except SyntaxError as e:
+        return f"Syntax Error: {e}"
+
+# Function to auto format code
+def format_code(code):
+    try:
+        formatted = autopep8.fix_code(code)
+        formatted = black.format_str(formatted, mode=black.Mode())
+        return formatted
+    except Exception as e:
+        return f"Formatting Error: {e}"
+
+# Function to explain error
+def explain_error(error_msg):
+    if "unexpected EOF" in error_msg:
+        return "Possible reason: Missing bracket or incomplete statement."
+    elif "invalid syntax" in error_msg:
+        return "Possible reason: Wrong Python syntax."
+    else:
+        return "Check your code structure."
+
+# Main Program
+print("=== Syntax Surgeon AI Code Fixer ===")
+
+user_code = input("Enter your Python Code:\n")
+
+# Syntax Check
+result = check_syntax(user_code)
+print("\nSyntax Check Result:")
+print(result)
+
+# If error explain it
+if "Syntax Error" in result:
+    explanation = explain_error(result)
+    print("\nExplanation:")
+    print(explanation)
+
+# Auto format code
+print("\nFormatted Code:")
+print(format_code(user_code))
